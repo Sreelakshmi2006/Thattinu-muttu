@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ask the Monkey</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #fdf6e3;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #5d4037;
+    }
+
+    input {
+      padding: 10px;
+      width: 300px;
+      font-size: 1em;
+      margin-top: 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 1em;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      background-color: #ffb74d;
+      color: white;
+      border-radius: 8px;
+    }
+
+    button:hover {
+      background-color: #ffa726;
+    }
+
+    img {
+      margin-top: 10px;
+      width: 300px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #caption {
+      margin-top: 15px;
+      font-size: 1.2em;
+      color: #333;
+      font-style: italic;
+    }
+    #response{
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐵 Ask the Monkey</h1>
+  <p>Ask any question below 😎</p>
+
+  <input type="text" id="questionInput" placeholder="Ask your question...">
+  <br>
+  <button onclick="showMonkey()">Ask the Monkey</button>
+
+  <div id="response">
+    <img id="monkeyImage" src="" alt="Thinking Monkey" style="display:none; height: 150px; width: 150px;">
+    <p id="caption"></p>
+  </div>
+
+  <script>
+    // ✅ Working monkey image URLs (free to use)
+    const monkeyImages = [
+      "https://th.bing.com/th/id/OIP.YdvWZ5jxhD546Px4DuTVEAHaHW?w=189&h=187&c=7&r=0&o=7&pid=1.7&rm=3",
+      "data:image/webp;base64,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",
+      "https://th.bing.com/th/id/OIP.nRxcJKNhsMmPoQAZElLC4QHaE7?w=272&h=181&c=7&r=0&o=5&pid=1.7",
+    ];
+
+    // 😄 Funny monkey replies
+    const monkeyCaptions = [
+      "The monkey is still thinking...",
+      "Too lazy to answer. Try again later.",
+      "Ask me after a banana break.",
+      "That's a silly question, human.",
+      "Let me meditate on that under a tree.",
+      "My monkey brain is buffering...",
+      "Hmm... no answer for you today.",
+      "I’m a monkey, not Google!"
+    ];
+
+    function showMonkey() {
+      const input = document.getElementById("questionInput").value.trim();
+      const image = document.getElementById("monkeyImage");
+      const caption = document.getElementById("caption");
+
+      if (input === "") {
+        caption.textContent = "You didn't even ask anything!";
+        image.style.display = "none";
+        return;
+      }
+
+      const randomImg = monkeyImages[Math.floor(Math.random() * monkeyImages.length)];
+      const randomCaption = monkeyCaptions[Math.floor(Math.random() * monkeyCaptions.length)];
+
+      image.src = randomImg;
+      image.style.display = "flex";
+      caption.textContent = randomCaption;
+    }
+  </script>
+
+</body>
+</html>
